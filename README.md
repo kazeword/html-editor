@@ -2,8 +2,7 @@
 
 一个创新的本地Web开发工具，旨在通过直观的可视化操作与自动化提示词（Prompt）生成，彻底变革前端修改与迭代的工作流。
 
-![项目主界面截图](https://i.imgur.com/eBf2YVp.png) <!-- 建议您将此处的URL替换为您自己项目的主界面截图 -->
-
+![项目主界面截图](https://raw.githubusercontent.com/kazeword/html-editor/master/assets/screenshot.png)
 ---
 
 ## 核心理念：搭建从“视觉”到“文本指令”的桥梁
