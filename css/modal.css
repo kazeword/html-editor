@@ -1,0 +1,132 @@
+/* css/modal.css: 需求清单弹窗的专属样式 */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content h3 {
+    margin: 0 0 16px 0;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.requirement-list-container {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    margin-bottom: 16px;
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+#requirementList {
+    list-style: none;
+    margin: 0;
+    padding: 8px;
+}
+
+.requirement-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 4px;
+}
+.requirement-item:hover {
+    background-color: #f7f7f7;
+}
+
+.requirement-item p {
+    margin: 0;
+    flex-grow: 1;
+    font-size: 0.9em;
+    color: var(--color-text-primary);
+    word-break: break-all;
+}
+
+.requirement-item .state-buttons {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.requirement-item .state-btn {
+    font-size: 0.75em;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: transparent;
+    white-space: nowrap;
+}
+
+.state-btn[data-state="pending"] { border-color: var(--status-pending); color: var(--status-pending); }
+.state-btn[data-state="pending"]:hover,
+.state-btn[data-state="pending"].active { background-color: rgba(0, 123, 255, 0.1); }
+
+.state-btn[data-state="resolved"] { border-color: var(--status-resolved); color: var(--status-resolved); }
+.state-btn[data-state="resolved"]:hover,
+.state-btn[data-state="resolved"].active { background-color: rgba(40, 167, 69, 0.1); }
+
+.state-btn[data-state="low_priority"] { border-color: var(--status-low-priority); color: var(--status-low-priority); }
+.state-btn[data-state="low_priority"]:hover,
+.state-btn[data-state="low_priority"].active { background-color: rgba(108, 117, 125, 0.1); }
+
+.requirement-item .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 1.2em;
+    transition: color 0.2s ease;
+    padding: 0 4px;
+    flex-shrink: 0;
+}
+.requirement-item .delete-btn:hover {
+    color: #f44336;
+}
+
+.add-requirement-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.add-requirement-form input {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    font-size: 0.9em;
+}
+.add-requirement-form input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+}

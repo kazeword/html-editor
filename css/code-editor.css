@@ -1,0 +1,153 @@
+/* css/code-editor.css */
+
+/* css/code-editor.css: "Code 编辑窗口" 的专属样式 */
+
+.resizable-split-view {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.split-pane {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#file-explorer-pane {
+    width: 200px; /* 初始宽度 */
+    min-width: 150px;
+    background-color: var(--color-sidebar-bg);
+    color: var(--color-sidebar-text);
+}
+
+#file-explorer-pane .panel-header {
+    border-bottom: 1px solid #3c3c3c;
+}
+
+#file-explorer-pane h2 {
+    color: var(--color-sidebar-text);
+    text-transform: uppercase;
+    font-size: 0.8em;
+    letter-spacing: 0.5px;
+}
+
+.file-actions {
+    display: flex;
+    align-items: center;
+}
+
+.file-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-sidebar-text);
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+.file-actions button:hover {
+    background-color: var(--color-sidebar-hover-bg);
+}
+#file-explorer-pane .action-btn {
+    display: none;
+}
+#file-explorer-pane.project-loaded .action-btn {
+    display: flex;
+}
+
+#fileTreeContainer {
+    padding: 5px;
+    overflow: auto;
+    flex-grow: 1;
+}
+
+.welcome-view {
+    padding: 20px;
+    text-align: center;
+    color: #888;
+    font-size: 0.9em;
+}
+
+.vscode-explorer, .vscode-explorer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.vscode-explorer ul {
+    padding-left: 18px;
+}
+
+.tree-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.tree-item:hover {
+    background-color: var(--color-sidebar-hover-bg);
+}
+.tree-item.active {
+    background-color: var(--color-sidebar-active-bg);
+    color: #fff;
+}
+.tree-item.modified::after {
+    content: '●';
+    font-size: 10px;
+    color: #e3a34a;
+    margin-left: auto;
+    padding-left: 5px;
+}
+
+/* --- [核心修复] 重写编辑器面板的全部样式 --- */
+
+/* 1. 编辑器的主面板，它是一个flex子项，需要能垂直排列其内容 */
+#code-editor-pane {
+    flex-grow: 1; /* 占据父级（split-view）的剩余水平空间 */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* 防止内容溢出 */
+}
+
+/* 2. CodeMirror的直接父容器 */
+#code-editor-container {
+    position: relative; /* 为子元素的绝对定位提供基准 */
+    flex: 1 1 0; /* 一个更健壮的flex写法，让它占据所有可用的垂直空间 */
+    overflow: hidden; /* 防止CodeMirror实例溢出 */
+}
+
+/* 3. CodeMirror实例本身 */
+.CodeMirror {
+    /* 使用绝对定位强制撑满其父容器(#code-editor-container) */
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100% !important;
+    
+    font-family: var(--font-mono);
+    font-size: 0.85em; 
+    line-height: 1.6;
+}
+
+/* --- [核心修复结束] --- */
+
+/* 分隔条样式 */
+.gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    width: 5px;
+    cursor: col-resize;
+    flex-shrink: 0;
+}

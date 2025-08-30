@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI辅助可视化项目编辑器 (窗口化版)</title>
+    <link rel="stylesheet" href="css/main.css">
+    <!-- [核心修复] 引入本地的 CodeMirror 5 样式 -->
+    <link rel="stylesheet" href="lib/codemirror/codemirror.min.css">
+    <link rel="stylesheet" href="lib/codemirror/vscode-dark.min.css">
+</head>
+<body>
+    <div id="canvas"></div>
+
+    <!-- 窗口 A: Code 编辑 -->
+    <div id="code-editor-window" class="window" data-id="code-editor">
+        <div class="window-header">
+            <span id="openedFileName">Code 编辑</span>
+            <div class="header-actions">
+                <button id="previewFileBtn" class="button-secondary" disabled>预览</button>
+                <button id="saveFileBtn" class="button-primary" disabled>保存</button>
+            </div>
+        </div>
+        <div class="window-content resizable-split-view">
+            <div id="file-explorer-pane" class="split-pane">
+                <div class="panel-header">
+                    <h2 id="projectRootName">项目文件</h2>
+                    <div class="file-actions">
+                        <button id="newFileBtn" class="action-btn" title="新建文件">
+                            <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M4.5 1.5a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V4.707L8.707 1.5H4.5ZM8 1.5V4h2.5L8 1.5Z"/></svg>
+                        </button>
+                        <button id="newFolderBtn" class="action-btn" title="新建文件夹">
+                           <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M2.5 2A1.5 1.5 0 0 0 1 3.5v9A1.5 1.5 0 0 0 2.5 14h11a1.5 1.5 0 0 0 1.5-1.5V5.707a1.5 1.5 0 0 0-.44-1.06L12.353 2.44A1.5 1.5 0 0 0 11.293 2H2.5Z"/></svg>
+                        </button>
+                        <button id="openProjectBtn" title="打开文件夹">
+                            <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M1.5 3A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-6A1.5 1.5 0 0 0 14.5 5h-6.25a.5.5 0 0 1-.4-.2l-.8-1.2A1.5 1.5 0 0 0 6.25 3h-4.75Z"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div id="fileTreeContainer">
+                    <div id="fileTree" class="vscode-explorer">
+                        <div class="welcome-view">请打开一个项目文件夹...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="gutter"></div>
+            <div id="code-editor-pane" class="split-pane">
+                 <!-- CodeMirror 将会挂载到这个容器 -->
+                 <div id="code-editor-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 窗口 B: 浏览器 -->
+    <div id="browser-window" class="window" data-id="browser">
+        <div class="window-header">
+            <span>浏览器</span>
+        </div>
+        <div class="browser-toolbar">
+            <div class="browser-controls">
+                <button id="browserRefreshBtn" title="刷新">
+                    <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M11.534 2.534a.5.5 0 0 0-.708-.708L9.5 3.116A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-3.66-5.182l1.694 1.716Z"/></svg>
+                </button>
+            </div>
+            <div class="separator"></div>
+            <div id="tabs-container" class="tabs-container"></div>
+            <div class="mode-switch-container" title="切换“需求模式”以进行标注，或切换至“浏览模式”以自由交互。">
+                <span id="modeLabel"></span>
+                <label class="switch">
+                    <input type="checkbox" id="modeSwitch" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="iframe-container">
+                <iframe id="previewFrame"></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 窗口 C: AI 提示词 -->
+    <div id="ai-prompt-window" class="window" data-id="ai-prompt">
+        <div class="window-header">AI 提示词</div>
+        <div class="window-content" id="ai-prompt-content">
+            <!-- 提示词的结构化UI将在这里动态生成 -->
+            <div class="welcome-prompt-view">
+                为当前HTML文件添加修改需求后，点击下方“生成”按钮。
+            </div>
+        </div>
+        <div class="controls">
+            <button id="generatePromptBtn" class="button-primary">生成AI提示词</button>
+            <button id="copyPromptBtn" class="button-secondary">复制提示词</button>
+        </div>
+    </div>
+
+    <!-- 需求清单弹窗 (结构不变) -->
+    <div id="requirementModal" class="modal">
+        <div class="modal-content">
+            <h3>管理元素需求</h3>
+            <div class="requirement-list-container">
+                <ul id="requirementList"></ul>
+            </div>
+            <form id="addRequirementForm" class="add-requirement-form">
+                <input type="text" id="newRequirementText" placeholder="添加一条新需求..." required>
+                <button type="submit" class="button-primary">添加</button>
+            </form>
+            <div class="modal-actions">
+                <button id="closeRequirementModalBtn" class="button-secondary">关闭</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 自定义右键菜单 (结构不变) -->
+    <div id="contextMenu" class="context-menu">
+        <ul>
+            <li data-action="newFile">新建文件</li>
+            <li data-action="newFolder">新建文件夹</li>
+            <li data-action="rename">重命名</li>
+            <li data-action="delete">删除</li>
+        </ul>
+    </div>
+
+    <!-- 引入 interact.js -->
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    
+    <!-- [核心修复] 引入本地的 CodeMirror 5 核心库和语言模式 -->
+    <script src="lib/codemirror/codemirror.min.js"></script>
+    <script src="lib/codemirror/xml.min.js"></script>
+    <script src="lib/codemirror/javascript.min.js"></script>
+    <script src="lib/codemirror/css.min.js"></script>
+    <script src="lib/codemirror/htmlmixed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

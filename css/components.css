@@ -1,0 +1,237 @@
+/* css/components.css: 可复用的小组件样式 */
+
+/* AI 提示词区域 */
+#ai-prompt-window .window-content {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing);
+    overflow-y: auto;
+}
+
+.welcome-prompt-view {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+#ai-prompt-output-container {
+    font-size: 0.8em;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+}
+
+#ai-prompt-output-container pre {
+    background-color: var(--color-sidebar-bg);
+    color: #ccc;
+    padding: 1em;
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+}
+#ai-prompt-output-container code {
+    font-family: var(--font-mono);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* 按钮之间的间距 */
+}
+
+.prompt-section {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.prompt-section summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: var(--color-secondary-bg);
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+}
+.prompt-section summary::marker {
+    content: '▶ ';
+    font-size: 0.8em;
+}
+.prompt-section[open] > summary::marker {
+    content: '▼ ';
+}
+.prompt-section .section-content {
+    padding: 10px;
+    border-top: 1px solid var(--color-border);
+}
+.prompt-section .file-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+
+/* Switch 开关样式 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+    flex-shrink: 0;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 20px;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+input:checked + .slider {
+    background-color: var(--color-primary);
+}
+input:checked + .slider:before {
+    transform: translateX(14px);
+}
+
+#aiPromptOutput {
+    flex-grow: 1;
+    width: 100%;
+    border: none;
+    font-family: var(--font-family);
+    font-size: 0.9em;
+    resize: none;
+    padding: var(--spacing);
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    background-color: transparent;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    padding: var(--spacing);
+    border-top: 1px solid var(--color-border);
+    flex-shrink: 0;
+}
+
+/* 通用按钮样式 */
+.button-primary,
+.button-secondary {
+    padding: 8px 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.button-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+.button-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+.button-primary:disabled {
+    background-color: var(--color-primary-disabled);
+    cursor: not-allowed;
+}
+.button-secondary {
+    background-color: var(--color-secondary-bg);
+    color: var(--color-text-primary);
+}
+.button-secondary:hover {
+    background-color: var(--color-secondary-hover-bg);
+}
+
+/* 右键菜单 */
+.context-menu {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    background-color: #fcfcfc;
+    color: var(--color-text-primary);
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 0.9em;
+    padding: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.context-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.context-menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.context-menu li:hover {
+    background-color: var(--color-secondary-hover-bg);
+}
+
+/* Toast 通知系统样式 */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.toast {
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    color: #fff;
+    font-size: 0.9em;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: toast-fade-in 0.3s ease;
+}
+
+.toast.toast-success { background-color: #28a745; }
+.toast.toast-error { background-color: #dc3545; }
+.toast.toast-info { background-color: #17a2b8; }
+
+.toast.toast-fade-out {
+    animation: toast-fade-out 0.3s ease forwards;
+}
+
+@keyframes toast-fade-in {
+    from { opacity: 0; transform: translateX(100%); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toast-fade-out {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(100%); }
+}

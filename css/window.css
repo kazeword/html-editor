@@ -1,0 +1,59 @@
+/* css/window.css: 负责所有浮动窗口的通用样式 */
+
+.window {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-panel-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    border: 3px solid var(--color-border);
+    /* [核心修复] 增加内边距，在边框和内容之间创建一个“安全区”，防止误触 */
+    padding: 5px;    min-width: 250px;
+    min-height: 150px;
+    /* transform 用于 interact.js 的位置控制 */
+    transform: translate(0px, 0px); 
+}
+
+.window-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 让标题和按钮分开 */
+    height: var(--header-height);
+    padding: 0;
+    /* [核心修复] 使用负边距来抵消父元素的padding，使标题栏视觉上贴近边框 */
+    margin: -5px -5px 0 -5px;
+    padding: 0 12px; /* 恢复原有的左右内边距 */    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+    cursor: grab; /* 表明标题栏是可拖动的 */
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    user-select: none;
+}
+.window-header:active {
+    cursor: grabbing;
+}
+
+.window-content {
+    flex-grow: 1;
+    overflow: hidden; /* 内容区默认隐藏溢出 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 当窗口被最大化时，interact.js 会添加这个类 */
+.window.maximized {
+    width: 100% !important;
+    height: 100% !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+    border-radius: 0;
+    transition: all 0.2s ease-in-out;
+}
+
+/* interact.js 会在拖动或缩放时添加此类，以优化性能 */
+.interact-grabbing {
+    cursor: grabbing !important;
+}
